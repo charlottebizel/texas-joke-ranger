@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Citations de Kaamelott</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">Kaamelott</div>
+  <div class="hamburger" id="hamburger">&#9776;</div>
+  <nav id="nav-menu">
+    <a href="#home">Accueil</a>
+    <a href="#quotes">Citations</a>
+    <a href="#about">À propos</a>
+  </nav>
+  <button id="theme-toggle">🌙</button>
+</header>
+
+<main>
+  <section id="home">
+    <h1>Bienvenue sur les Citations de Kaamelott</h1>
+    <p>Découvrez des perles de la série culte !</p>
+  </section>
+
+  <section id="quotes">
+    <input type="text" id="search" placeholder="Chercher une citation...">
+    <div id="carousel" class="splide">
+      <div class="splide__track">
+        <ul class="splide__list" id="quote-list">
+          <!-- Citations chargées par JS -->
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <p>Projet frontend avec API de Kaamelott, JS personnalisé et bibliothèques Splide & Toastify.</p>
+  </section>
+</main>
+
+<!-- Modal -->
+<div id="quote-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p id="modal-text"></p>
+    <button id="copy-quote">Copier</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="script.js"></script>
+</body>
+</html>
