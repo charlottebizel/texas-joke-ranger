@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr" class="intro-body">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentification</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="intro-body">
+
+  <div class="intro-container">
+    <div id="auth-container">
+      <!-- Formulaire de connexion -->
+      <div class="form-wrapper">
+        <h2>Connexion</h2>
+        <form id="login-form">
+          <div>
+            <label for="login-username">Nom d'utilisateur</label>
+            <input type="text" id="login-username" name="username" required>
+          </div>
+          <div>
+            <label for="login-password">Mot de passe</label>
+            <input type="password" id="login-password" name="password" required>
+          </div>
+          <button type="submit">Se connecter</button>
+        </form>
+        <p id="login-message" class="message"></p>
+      </div>
+
+      <!-- Formulaire d'inscription -->
+      <div class="form-wrapper">
+        <h2>Inscription</h2>
+        <form id="register-form">
+          <div>
+            <label for="register-username">Nom d'utilisateur</label>
+            <input type="text" id="register-username" name="username" required>
+          </div>
+          <div>
+            <label for="register-password">Mot de passe</label>
+            <input type="password" id="register-password" name="password" required>
+          </div>
+          <button type="submit">S'inscrire</button>
+        </form>
+        <p id="register-message" class="message"></p>
+      </div>
+    </div>
+    <a href="index.html" class="btn">Retour à l'accueil</a>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>

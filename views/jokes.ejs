@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuck Norris Jokes</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenue, <%= user %>!</h1>
+        <div class="joke-container">
+            <p id="joke-text"><%= joke.value %></p>
+            <button id="add-to-favorites" data-joke-id="<%= joke.id %>">Ajouter aux favoris</button>
+            <button onclick="location.reload()">Nouvelle blague</button>
+        </div>
+        <h2>Vos favoris</h2>
+        <ul id="favorites-list">
+            <% favorites.forEach(fav => { %>
+                <li><%= fav.joke_text %> <button class="remove-from-favorites" data-joke-id="<%= fav.joke_id %>">Supprimer</button></li>
+            <% }) %>
+        </ul>
+        <a href="/logout">Déconnexion</a>
+    </div>
+    <script src="/js/jokes.js"></script>
+</body>
+</html>
