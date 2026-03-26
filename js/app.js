@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const userSession = document.getElementById('user-session');
 
-  // Vérifie le statut de connexion de l'utilisateur
+  // Check user login status
   async function checkSession() {
     try {
       const res = await fetch('/profile');
@@ -17,28 +17,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (err) {
       showLogin();
-      console.error('Erreur de session:', err);
+      console.error('Session error:', err);
     }
   }
 
-  // Affiche le bouton de déconnexion et le nom d'utilisateur
+  // Display logout button and username
   function showLogout(username) {
     if (userSession) {
       userSession.innerHTML = ''; // Clear existing content
       
       const welcomeText = document.createElement('span');
-      welcomeText.textContent = `Bonjour, ${username}`;
+      welcomeText.textContent = `Hello, ${username}`;
 
       const logoutBtn = document.createElement('button');
       logoutBtn.id = 'logout-btn';
-      logoutBtn.textContent = 'Déconnexion';
+      logoutBtn.textContent = 'Logout';
 
       logoutBtn.addEventListener('click', async () => {
         try {
           await fetch('/logout');
           window.location.href = '/index.html';
         } catch (err) {
-          console.error('Erreur de déconnexion:', err);
+          console.error('Logout error:', err);
         }
       });
 
@@ -47,14 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Affiche les liens de connexion et d'inscription
+  // Display login and registration links
   function showLogin() {
     if (userSession) {
       userSession.innerHTML = '';
     }
   }
 
-  // Lancer la vérification de session
+  // Start session check
   checkSession();
 
   const tabItems = document.querySelectorAll('.tab-item');

@@ -1,62 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const addToFavoritesButton = document.getElementById('add-to-favorites');
-    const removeFromFavoritesButtons = document.querySelectorAll('.remove-from-favorites');
-    const csrfToken = getCookie('csrf-token');
-
-    if (addToFavoritesButton) {
-        addToFavoritesButton.addEventListener('click', async () => {
-            const jokeId = addToFavoritesButton.dataset.jokeId;
-            const jokeText = document.getElementById('joke-text').textContent;
-
-            try {
-                const response = await fetch('/api/favorites', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-csrf-token': csrfToken
-                    },
-                    body: JSON.stringify({ joke_id: jokeId, joke_text: jokeText })
-                });
-
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    const data = await response.json();
-                    alert(data.message);
-                }
-            } catch (error) {
-                console.error('Erreur:', error);
-            }
-        });
+    if (document.querySelector('.splide')) {
+        new Splide('.splide').mount();
     }
 
-    removeFromFavoritesButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const jokeId = button.dataset.jokeId;
+    const modal = document.getElementById('joke-modal');
+    const modalJokeText = document.getElementById('modal-joke-text');
+    const closeBtn = document.querySelector('.close-btn');
+    const copyBtn = document.getElementById('copy-joke-btn');
 
-            try {
-                const response = await fetch(`/api/favorites/${jokeId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'x-csrf-token': csrfToken
-                    }
-                });
-
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    const data = await response.json();
-                    alert(data.message);
-                }
-            } catch (error) {
-                console.error('Erreur:', error);
-            }
+    document.querySelectorAll('.splide__slide').forEach(slide => {
+        slide.addEventListener('click', () => {
+            const jokeText = slide.dataset.jokeText;
+            modalJokeText.textContent = jokeText;
+            modal.style.display = 'block';
         });
     });
 
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
+    if(closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
     }
+
+    if(copyBtn) {
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(modalJokeText.textContent).then(() => {
+                alert('Joke copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        });
+    }
+
+    window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
 });

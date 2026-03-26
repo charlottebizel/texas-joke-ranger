@@ -1,50 +1,51 @@
 <!DOCTYPE html>
-<html lang="fr" class="intro-body">
+<html lang="en" class="intro-body">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Authentification</title>
+  <title>Authentication</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="intro-body">
 
   <div class="intro-container">
+    <p>If you want to see jokes, you have to log in.</p>
     <div id="auth-container">
-      <!-- Formulaire de connexion -->
+      <!-- Login form -->
       <div class="form-wrapper">
-        <h2>Connexion</h2>
+        <h2>Login</h2>
         <form id="login-form">
           <div>
-            <label for="login-username">Nom d'utilisateur</label>
+            <label for="login-username">Username</label>
             <input type="text" id="login-username" name="username" required>
           </div>
           <div>
-            <label for="login-password">Mot de passe</label>
+            <label for="login-password">Password</label>
             <input type="password" id="login-password" name="password" required>
           </div>
-          <button type="submit">Se connecter</button>
+          <button type="submit">Login</button>
         </form>
         <p id="login-message" class="message"></p>
       </div>
 
-      <!-- Formulaire d'inscription -->
+      <!-- Registration form -->
       <div class="form-wrapper">
-        <h2>Inscription</h2>
+        <h2>Register</h2>
         <form id="register-form">
           <div>
-            <label for="register-username">Nom d'utilisateur</label>
+            <label for="register-username">Username</label>
             <input type="text" id="register-username" name="username" required>
           </div>
           <div>
-            <label for="register-password">Mot de passe</label>
+            <label for="register-password">Password</label>
             <input type="password" id="register-password" name="password" required>
           </div>
-          <button type="submit">S'inscrire</button>
+          <button type="submit">Register</button>
         </form>
         <p id="register-message" class="message"></p>
       </div>
     </div>
-    <a href="index.html" class="btn">Retour à l'accueil</a>
+    <a href="index.html" class="btn">Back to Home</a>
   </div>
 
   <script src="js/auth.js"></script>

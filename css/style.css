@@ -110,13 +110,13 @@ body.dark-theme .tabs {
     padding: 10px 20px;
     cursor: pointer;
     background-color: transparent;
-    color: var(--text-color-light);
+    color: darkgrey;
     border: 1px solid transparent;
     border-bottom: none;
 }
 
 body.dark-theme .tab-item {
-    color: var(--text-color-dark);
+    color: darkgrey;
 }
 
 .tab-item.active {
@@ -152,6 +152,10 @@ body.dark-theme .tab-item {
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     font-size: 1.5rem;
+}
+
+.splide__slide p {
+    color: grey;
 }
 
 body.dark-theme .splide__slide {
@@ -206,6 +210,10 @@ body.dark-theme #search-bar {
 body.dark-theme .modal-content {
     background-color: var(--bg-color-dark);
     color: var(--text-color-dark);
+}
+
+#modal-joke-text {
+    color: grey;
 }
 
 .close-btn {
@@ -299,9 +307,10 @@ body.dark-theme #joke-list-container {
     align-items: center;
     height: 100vh;
     background-color: #000;
-    background-image: url('../assets/7_b3e89a13-0792-410b-bbf6-cea8bd9a0b7d_1200x1200.webp');
+    background-image: url('../assets/login.png');
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
 }
 
 .intro-container {

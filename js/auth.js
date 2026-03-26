@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             return data.csrfToken;
         } catch (error) {
-            console.error('Erreur lors de la récupération du token CSRF:', error);
+            console.error('Error retrieving CSRF token:', error);
             return null;
         }
     }
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const csrfToken = await getCsrfToken();
             if (!csrfToken) {
-                registerMessage.textContent = 'Impossible de sécuriser la session. Veuillez réessayer.';
+                registerMessage.textContent = 'Could not secure session. Please try again.';
                 registerMessage.style.color = 'red';
                 return;
             }
@@ -44,15 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json();
 
                 if (res.ok) {
-                    registerMessage.textContent = 'Inscription réussie ! Vous pouvez maintenant vous connecter.';
+                    registerMessage.textContent = 'Registration successful! You can now log in.';
                     registerMessage.style.color = 'green';
                     registerForm.reset();
                 } else {
-                    registerMessage.textContent = data.message || 'Une erreur est survenue.';
+                    registerMessage.textContent = data.message || 'An error occurred.';
                     registerMessage.style.color = 'red';
                 }
             } catch (err) {
-                registerMessage.textContent = 'Erreur de connexion au serveur.';
+                registerMessage.textContent = 'Server connection error.';
                 registerMessage.style.color = 'red';
             }
         });
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const csrfToken = await getCsrfToken();
             if (!csrfToken) {
-                loginMessage.textContent = 'Impossible de sécuriser la session. Veuillez réessayer.';
+                loginMessage.textContent = 'Could not secure session. Please try again.';
                 loginMessage.style.color = 'red';
                 return;
             }
@@ -90,11 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Rediriger vers la page des blagues après une connexion réussie
                     window.location.href = data.redirect;
                 } else {
-                    loginMessage.textContent = data.message || 'Identifiants invalides.';
+                    loginMessage.textContent = data.message || 'Invalid credentials.';
                     loginMessage.style.color = 'red';
                 }
             } catch (err) {
-                loginMessage.textContent = 'Erreur de connexion au serveur.';
+                loginMessage.textContent = 'Server connection error.';
                 loginMessage.style.color = 'red';
             }
         });

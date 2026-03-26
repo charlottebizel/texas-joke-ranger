@@ -10,6 +10,7 @@ const path = require('path');
 
 const app = express();
 const port = 3001;
+const isProduction = process.env.NODE_ENV === 'production';
 let db;
 
 // Middlewares
@@ -24,7 +25,11 @@ app.use(session({
   secret: 'a_very_secret_key', // À changer pour une vraie clé secrète en production
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // Mettre à `true` si en HTTPS
+  cookie: { 
+    secure: isProduction, 
+    httpOnly: true,
+    sameSite: 'strict'
+  }
 }));
 
 // === MIDDLEWARE DE VÉRIFICATION D'AUTHENTIFICATION ===
@@ -73,16 +78,19 @@ app.use(csrfProtection);
 
 app.get('/csrf-token', (req, res) => {
     const csrfToken = crypto.randomBytes(100).toString('hex');
-    res.cookie('csrf-token', csrfToken, { secure: false, httpOnly: false }); 
+    res.cookie('csrf-token', csrfToken, { secure: isProduction, httpOnly: true }); 
     res.json({ csrfToken });
 });
 
 app.get('/jokes', isAuthenticated, async (req, res) => {
   try {
-    const response = await fetch('https://api.chucknorris.io/jokes/random');
-    const joke = await response.json();
+    const jokePromises = [];
+    for (let i = 0; i < 10; i++) {
+      jokePromises.push(fetch('https://api.chucknorris.io/jokes/random').then(res => res.json()));
+    }
+    const jokes = await Promise.all(jokePromises);
     const favorites = await db.all('SELECT * FROM favorites WHERE user_id = ?', [req.session.userId]);
-    res.render('jokes', { joke, favorites, user: req.session.username });
+    res.render('jokes', { jokes, favorites, user: req.session.username });
   } catch (err) {
     res.status(500).send('Erreur lors de la récupération des blagues.');
   }
@@ -124,13 +132,20 @@ app.post('/login', async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Identifiants invalides.' });
     }
-    req.session.userId = user.id;
-    req.session.username = user.username;
+    
+    req.session.regenerate(function(err) {
+        if (err) {
+            return res.status(500).json({ message: 'Erreur lors de la régénération de la session.' });
+        }
 
-    const csrfToken = crypto.randomBytes(100).toString('hex');
-    res.cookie('csrf-token', csrfToken, { secure: false, httpOnly: false }); // Mettre secure: true en production (HTTPS)
+        req.session.userId = user.id;
+        req.session.username = user.username;
 
-    res.status(200).json({ message: 'Connexion réussie.', user: { id: user.id, username: user.username }, redirect: '/jokes' });
+        const csrfToken = crypto.randomBytes(100).toString('hex');
+        res.cookie('csrf-token', csrfToken, { secure: isProduction, httpOnly: true });
+
+        res.status(200).json({ message: 'Connexion réussie.', user: { id: user.id, username: user.username }, redirect: '/jokes' });
+    });
   } catch (err) {
     res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
