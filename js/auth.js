@@ -1,10 +1,22 @@
+/**
+ * @file Manages the client-side authentication process (login and registration).
+ * @description This script handles form submissions for user login and registration,
+ * including fetching a CSRF token for security, sending credentials to the server,
+ * and displaying feedback messages to the user.
+ */
 document.addEventListener('DOMContentLoaded', () => {
+    // Get references to the form elements and message display areas.
     const registerForm = document.getElementById('register-form');
     const loginForm = document.getElementById('login-form');
     const registerMessage = document.getElementById('register-message');
     const loginMessage = document.getElementById('login-message');
 
-    // Fonction pour récupérer le token CSRF
+    /**
+     * Fetches a CSRF token from the server.
+     * This token is required for all state-changing requests (POST, DELETE, etc.)
+     * to prevent Cross-Site Request Forgery attacks.
+     * @returns {Promise<string|null>} A promise that resolves to the CSRF token, or null if an error occurs.
+     */
     async function getCsrfToken() {
         try {
             const response = await fetch('/csrf-token');
@@ -16,14 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Gestion de l'inscription
+    // --- Registration Form Handling ---
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Prevent the default browser form submission.
             const username = registerForm.username.value;
             const password = registerForm.password.value;
-            registerMessage.textContent = '';
+            registerMessage.textContent = ''; // Clear any previous messages.
 
+            // Fetch a fresh CSRF token before submitting.
             const csrfToken = await getCsrfToken();
             if (!csrfToken) {
                 registerMessage.textContent = 'Could not secure session. Please try again.';
@@ -32,21 +45,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
+                // Send the registration request to the server.
                 const res = await fetch('/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-csrf-token': csrfToken
+                        'x-csrf-token': csrfToken // Include CSRF token in the request header.
                     },
                     body: JSON.stringify({ username, password }),
                 });
 
                 const data = await res.json();
 
+                // Handle the server's response.
                 if (res.ok) {
                     registerMessage.textContent = 'Registration successful! You can now log in.';
                     registerMessage.style.color = 'green';
-                    registerForm.reset();
+                    registerForm.reset(); // Clear the form fields on success.
                 } else {
                     registerMessage.textContent = data.message || 'An error occurred.';
                     registerMessage.style.color = 'red';
@@ -58,14 +73,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Gestion de la connexion
+    // --- Login Form Handling ---
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Prevent the default browser form submission.
             const username = loginForm.username.value;
             const password = loginForm.password.value;
-            loginMessage.textContent = '';
+            loginMessage.textContent = ''; // Clear any previous messages.
             
+            // Fetch a fresh CSRF token before submitting.
             const csrfToken = await getCsrfToken();
             if (!csrfToken) {
                 loginMessage.textContent = 'Could not secure session. Please try again.';
@@ -73,21 +89,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-
             try {
+                // Send the login request to the server.
                 const res = await fetch('/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-csrf-token': csrfToken
+                        'x-csrf-token': csrfToken // Include CSRF token in the request header.
                     },
                     body: JSON.stringify({ username, password }),
                 });
 
                 const data = await res.json();
 
+                // Handle the server's response.
                 if (res.ok && data.redirect) {
-                    // Rediriger vers la page des blagues après une connexion réussie
+                    // On successful login, redirect the user to the specified page.
                     window.location.href = data.redirect;
                 } else {
                     loginMessage.textContent = data.message || 'Invalid credentials.';

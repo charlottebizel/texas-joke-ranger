@@ -1,15 +1,25 @@
+<!--
+ * @file EJS template for the jokes page.
+ * @description This template renders a page that displays Chuck Norris jokes in a carousel.
+ * It receives a 'jokes' array from the server to populate the carousel slides.
+ * It also includes the structure for a modal to view and copy individual jokes.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chuck Norris Jokes</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <!-- Link to the main stylesheet, using BASE_URL provided by the server -->
+    <link rel="stylesheet" href="<%= BASE_URL %>/css/style.css">
+    <!-- Link to the Splide carousel stylesheet -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <!-- Link to the custom Western font -->
     <link href="https://fonts.cdnfonts.com/css/western" rel="stylesheet">
 </head>
 <body>
     <header>
+        <!-- Standard navigation bar -->
         <nav class="navbar">
             <a href="/" class="nav-logo">TEXAS JOKE RANGER</a>
             <ul class="nav-menu">
@@ -32,10 +42,19 @@
     </header>
 
     <main>
+        <!-- Splide.js carousel container -->
         <div class="splide">
             <div class="splide__track">
                 <ul class="splide__list">
+                    <%# 
+                      - Loops through the 'jokes' array passed from the server.
+                      - For each joke, it creates a carousel slide.
+                    %>
                     <% jokes.forEach(joke => { %>
+                        <%#
+                          - The slide element stores the full joke text in a 'data-joke-text' attribute.
+                          - This attribute is used by js/jokes.js to populate the modal.
+                        %>
                         <li class="splide__slide" data-joke-text="<%= joke.value %>">
                             <p><%= joke.value %></p>
                         </li>
@@ -45,6 +64,10 @@
         </div>
     </main>
 
+    <!-- 
+      - Modal for displaying a single joke.
+      - This is hidden by default with CSS and shown by js/jokes.js.
+    -->
     <div id="joke-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
@@ -53,7 +76,9 @@
         </div>
     </div>
 
+    <!-- Script for the Splide carousel -->
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-    <script src="/js/jokes.js"></script>
+    <!-- Custom script for modal and other interactions, using BASE_URL -->
+    <script src="<%= BASE_URL %>/js/jokes.js"></script>
 </body>
 </html>

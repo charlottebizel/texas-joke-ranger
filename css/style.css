@@ -1,3 +1,11 @@
+/*
+ * @file Main stylesheet for the Texas Joke Ranger application.
+ * @description This file contains all the styles for the website, including
+ * layout, theming (light/dark), components (navbar, tabs, modal), and responsive design.
+ */
+
+/* === ROOT VARIABLES === */
+/* Defines color variables for theming the application. */
 :root {
     --primary-color: #da91525a;
     --secondary-color: #b30000;
@@ -9,7 +17,7 @@
     --card-bg-dark: rgba(0, 0, 0, 0.6);
 }
 
-/* General styles */
+/* === GENERAL STYLES === */
 body {
     font-family: 'Western', sans-serif;
     font-size: 110%;
@@ -32,9 +40,7 @@ main {
     padding: 20px;
 }
 
-
-
-/* Navbar */
+/* === NAVBAR === */
 .navbar {
     display: flex;
     justify-content: space-between ;
@@ -74,6 +80,7 @@ main {
     color: var(--secondary-color);
 }
 
+/* Hamburger menu for mobile */
 .hamburger {
     display: none;
     cursor: pointer;
@@ -88,7 +95,7 @@ main {
     transition: all 0.3s ease-in-out;
 }
 
-/* Tabs */
+/* === TABS === */
 .tabs {
     margin: 20px auto;
     max-width: 800px;
@@ -139,7 +146,7 @@ body.dark-theme .tab-item {
     display: block;
 }
 
-/* Carousel */
+/* === CAROUSEL (SPLIDE) === */
 .splide {
     margin: 20px auto;
     max-width: 1200px;
@@ -162,6 +169,7 @@ body.dark-theme .splide__slide {
     background-color: var(--card-bg-dark);
 }
 
+/* === SEARCH BAR === */
 .search-container {
     display: flex;
     flex-direction: column;
@@ -183,9 +191,9 @@ body.dark-theme #search-bar {
 }
 
 
-/* Modal */
+/* === MODAL === */
 .modal {
-    display: none;
+    display: none; /* Hidden by default */
     position: fixed;
     z-index: 1;
     left: 0;
@@ -234,12 +242,12 @@ body.dark-theme .close-btn {
     cursor: pointer;
 }
 
-/* Back to top button */
+/* === BACK TO TOP BUTTON === */
 #back-to-top {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    display: none;
+    display: none; /* Hidden by default, shown via JS */
     background-color: var(--primary-color);
     color: #fff;
     border: none;
@@ -250,7 +258,7 @@ body.dark-theme .close-btn {
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Tree view */
+/* === JOKE LIST (TREE VIEW) === */
 #joke-list-container {
     list-style-type: none;
     padding: 20px;
@@ -282,25 +290,25 @@ body.dark-theme #joke-list-container {
 }
 
 #joke-list-container .caret::before {
-    content: "\25B6";
+    content: "\25B6"; /* Right-pointing triangle */
     color: var(--secondary-color);
     display: inline-block;
     margin-right: 6px;
 }
 
 #joke-list-container .caret-down::before {
-    transform: rotate(90deg);
+    transform: rotate(90deg); /* Rotated for expanded view */
 }
 
 #joke-list-container .nested {
-    display: none;
+    display: none; /* Collapsed by default */
 }
 
 #joke-list-container .active {
-    display: block;
+    display: block; /* Shown when active */
 }
 
-/* Intro page */
+/* === INTRO/AUTH PAGE === */
 .intro-body {
     display: flex;
     justify-content: center;
@@ -320,6 +328,7 @@ body.dark-theme #joke-list-container {
     border-radius: 10px;
 }
 
+/* Styles for text animation on intro page */
 .ml1 {
     font-weight: 900;
     font-size: 4em;
@@ -367,7 +376,9 @@ body.dark-theme #joke-list-container {
     box-shadow: 0 0 20px rgba(255,255,255,0.5);
 }
 
+/* === RESPONSIVE DESIGN (Media Queries) === */
 @media (max-width: 768px) {
+    /* Styles for the mobile hamburger menu */
     .nav-menu {
         position: fixed;
         left: -100%;
@@ -410,15 +421,16 @@ body.dark-theme #joke-list-container {
     }
 }
 
+/* === HOMEPAGE TAB-SPECIFIC STYLES === */
 #tab1 {
     background: url('../assets/chuck tab 1.webp') no-repeat center/cover;
-    color: white; /* pour que le texte soit lisible */
+    color: white; /* for text readability */
     min-height: 300px;
     padding: 20px;
 }
 
 #tab1 h2, #tab1 p {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for text */
     padding: 10px;
     border-radius: 5px;
     display: inline-block;
@@ -459,6 +471,7 @@ body.dark-theme #joke-list-container {
     text-align: center;
 }
 
+/* General button style */
 .btn {
     display: inline-block;
     padding: 10px 20px;

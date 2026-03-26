@@ -1,3 +1,9 @@
+<!--
+ * @file Authentication page for user login and registration.
+ * @description This page provides two forms: one for existing users to log in,
+ * and one for new users to register. It includes fields for username and password,
+ * and areas to display feedback messages. The interactivity is handled by js/auth.js.
+-->
 <!DOCTYPE html>
 <html lang="en" class="intro-body">
 <head>
@@ -10,7 +16,10 @@
 
   <div class="intro-container">
     <p>If you want to see jokes, you have to log in.</p>
+    
+    <!-- Container for both login and registration forms -->
     <div id="auth-container">
+      
       <!-- Login form -->
       <div class="form-wrapper">
         <h2>Login</h2>
@@ -25,6 +34,7 @@
           </div>
           <button type="submit">Login</button>
         </form>
+        <!-- This paragraph is used to display messages from the server after a login attempt -->
         <p id="login-message" class="message"></p>
       </div>
 
@@ -42,12 +52,16 @@
           </div>
           <button type="submit">Register</button>
         </form>
+        <!-- This paragraph is used to display messages from the server after a registration attempt -->
         <p id="register-message" class="message"></p>
       </div>
     </div>
+    
+    <!-- Link to return to the homepage -->
     <a href="index.html" class="btn">Back to Home</a>
   </div>
 
+  <!-- Script that handles form submission and communication with the server -->
   <script src="js/auth.js"></script>
 </body>
 </html>
