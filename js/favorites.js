@@ -1,14 +1,6 @@
-/**
- * @file favorites.js
- * @description Handles the removal of jokes from the favorites page.
- */
-
 document.addEventListener('DOMContentLoaded', () => {
 
-    /**
-     * Retrieves a fresh CSRF token from the server.
-     * @returns {Promise<string|null>}
-     */
+    // Retrieves a fresh CSRF token from the server
     async function getCsrfToken() {
         try {
             const res = await fetch('/csrf-token');
@@ -20,11 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Shows a toast notification.
-     * @param {string} message
-     * @param {string} color
-     */
+    // Shows a toast notification
     function showToast(message, color = '#b30000') {
         Toastify({
             text: message,

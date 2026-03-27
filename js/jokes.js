@@ -1,8 +1,3 @@
-/**
- * @file Manages the interactive elements on the jokes page.
- * @description Handles the Splide carousel, joke modal, and Add to Favorites feature.
- */
-
 document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize the Splide carousel
@@ -53,10 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === FAVORITES FEATURE ===
 
-    /**
-     * Retrieves a fresh CSRF token from the server.
-     * @returns {Promise<string|null>} The CSRF token or null on failure.
-     */
+    // Retrieves a fresh CSRF token from the server
     async function getCsrfToken() {
         try {
             const res = await fetch('/csrf-token');
@@ -68,11 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Shows a toast notification.
-     * @param {string} message - The message to display.
-     * @param {string} color - Background color of the toast.
-     */
+    // Shows a toast notification
     function showToast(message, color = '#b30000') {
         Toastify({
             text: message,

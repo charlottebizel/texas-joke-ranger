@@ -1,10 +1,3 @@
-/**
- * @file server.js
- * @description This is the main server file for the Texas Joke Ranger application.
- * It handles routing, authentication, database interaction, and serving static files.
- * It uses Express.js as the web framework and SQLite for the database.
- */
-
 // === DEPENDENCIES ===
 const express = require('express');
 const { open } = require('sqlite');
@@ -23,17 +16,11 @@ const port = 3001;
 const isProduction = process.env.NODE_ENV === 'production';
 
 // === CONSTANTS ===
-/**
- * @constant {string} BASE_URL
- * @description Base URL for the site, used in templates to ensure correct paths.
- */
+// Base URL for the site, used in templates
 const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
 
 // === RATE LIMITING (Security) ===
-/**
- * @constant {import('express-rate-limit').RateLimitRequestHandler} globalLimiter
- * @description A global rate limiter to prevent abuse. Limits to 100 requests per 15 minutes.
- */
+// A global rate limiter to prevent abuse
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -42,10 +29,7 @@ const globalLimiter = rateLimit({
   message: { message: 'Too many requests, please try again later.' }
 });
 
-/**
- * @constant {import('express-rate-limit').RateLimitRequestHandler} authLimiter
- * @description A stricter rate limiter for authentication routes to prevent brute-force attacks.
- */
+// A stricter rate limiter for auth routes to prevent brute-force attacks
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
@@ -54,11 +38,7 @@ const authLimiter = rateLimit({
   message: { message: 'Too many login attempts, please try again in 15 minutes.' }
 });
 
-/**
- * @type {import('sqlite').Database}
- * @description Variable to hold the active SQLite database connection.
- */
-let db;
+let db; // Variable to hold the database connection
 
 // === MIDDLEWARES ===
 app.set('view engine', 'ejs'); // Set EJS as the templating engine.
@@ -89,31 +69,18 @@ app.use(session({
 }));
 
 // === AUTHENTICATION MIDDLEWARE ===
-/**
- * Checks if a user is authenticated by verifying the session.
- * If not authenticated, redirects to the authentication page.
- * @param {object} req - Express request object.
- * @param {object} res - Express response object.
- * @param {function} next - Express next middleware function.
- */
+// Checks if a user is authenticated by verifying the session
 const isAuthenticated = (req, res, next) => {
   if (req.session.userId) {
-    next(); // User is authenticated, proceed to the next middleware/handler.
+    next();
   } else {
-    res.redirect('/auth.html'); // User is not authenticated, redirect to login.
+    res.redirect('/auth.html');
   }
 };
 
 // === CSRF PROTECTION MIDDLEWARE ===
-/**
- * A basic CSRF protection middleware.
- * It checks for a valid CSRF token in the request header for non-GET requests.
- * @param {object} req - Express request object.
- * @param {object} res - Express response object.
- * @param {function} next - Express next middleware function.
- */
+// A basic CSRF protection middleware
 const csrfProtection = (req, res, next) => {
-    // Skip CSRF check for safe methods.
     if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
         return next();
     }
@@ -121,7 +88,6 @@ const csrfProtection = (req, res, next) => {
     const csrfTokenFromHeader = req.headers['x-csrf-token'];
     const csrfTokenFromCookie = req.cookies['csrf-token'];
 
-    // If tokens are missing or don't match, reject the request.
     if (!csrfTokenFromHeader || !csrfTokenFromCookie || csrfTokenFromHeader !== csrfTokenFromCookie) {
         return res.status(403).json({ message: 'Action not authorized (Invalid CSRF token).' });
     }
@@ -132,11 +98,7 @@ const csrfProtection = (req, res, next) => {
 app.use(csrfProtection); // Apply CSRF protection to all relevant routes.
 
 // === DATABASE CONNECTION & SERVER START ===
-/**
- * @async
- * @function initializeApp
- * @description Opens a connection to the SQLite database and starts the Express server.
- */
+// Opens a connection to the SQLite database and starts the Express server
 (async () => {
   try {
     // Open a connection to the SQLite database.
@@ -157,27 +119,14 @@ app.use(csrfProtection); // Apply CSRF protection to all relevant routes.
 
 // === ROUTES ===
 
-/**
- * @route GET /csrf-token
- * @description Generates and provides a CSRF token to the client.
- * The client stores this and sends it back in headers for subsequent state-changing requests.
- * @param {import('express').Request} req - Express request object.
- * @param {import('express').Response} res - Express response object.
- */
+// Generates and provides a CSRF token to the client
 app.get('/csrf-token', (req, res) => {
     const csrfToken = crypto.randomBytes(100).toString('hex');
-    // Send the token in a cookie that is not accessible by client-side scripts.
     res.cookie('csrf-token', csrfToken, { secure: isProduction, httpOnly: true }); 
-    // Also send it as JSON so the client-side script can store it for use in headers.
     res.json({ csrfToken });
 });
 
-/**
- * @route GET /jokes
- * @description (Protected) Fetches 10 random jokes from an external API and renders the jokes page.
- * @param {import('express').Request} req - Express request object.
- * @param {import('express').Response} res - Express response object.
- */
+// (Protected) Fetches 10 random jokes from an external API and renders the jokes page
 app.get('/jokes', isAuthenticated, async (req, res) => {
   try {
     const jokePromises = [];
@@ -192,20 +141,12 @@ app.get('/jokes', isAuthenticated, async (req, res) => {
   }
 });
 
-/**
- * @route GET /jokes.html
- * @description Redirects requests from /jokes.html to the /jokes route to handle hardcoded links.
- */
+// Redirects requests from /jokes.html to the /jokes route
 app.get('/jokes.html', (req, res) => {
   res.redirect('/jokes');
 });
 
-/**
- * @route GET /favorites
- * @description (Protected) Renders the favorites page with the user's saved jokes.
- * @param {import('express').Request} req - Express request object.
- * @param {import('express').Response} res - Express response object.
- */
+// (Protected) Renders the favorites page with the user's saved jokes
 app.get('/favorites', isAuthenticated, async (req, res) => {
   try {
     const favorites = await db.all('SELECT * FROM favorites WHERE user_id = ?', [req.session.userId]);
@@ -218,13 +159,7 @@ app.get('/favorites', isAuthenticated, async (req, res) => {
 
 // --- AUTHENTICATION ROUTES ---
 
-/**
- * @route POST /register
- * @description (Rate-limited) Handles new user registration.
- * Hashes the password before storing it in the database.
- * @param {import('express').Request} req - Express request object.
- * @param {import('express').Response} res - Express response object.
- */
+// (Rate-limited) Handles new user registration
 app.post('/register', authLimiter, async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -243,13 +178,7 @@ app.post('/register', authLimiter, async (req, res) => {
   }
 });
 
-/**
- * @route POST /login
- * @description (Rate-limited) Handles user login.
- * On success, it regenerates the session to prevent session fixation attacks.
- * @param {import('express').Request} req - Express request object.
- * @param {import('express').Response} res - Express response object.
- */
+// (Rate-limited) Handles user login
 app.post('/login', authLimiter, async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -287,19 +216,14 @@ app.post('/login', authLimiter, async (req, res) => {
   }
 });
 
-/**
- * @route GET /logout
- * @description Logs the user out by destroying the session and clearing cookies.
- * @param {import('express').Request} req - Express request object.
- * @param {import('express').Response} res - Express response object.
- */
+// Logs the user out by destroying the session
 app.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).json({ message: 'Error during logout.' });
     }
-    res.clearCookie('connect.sid'); // Clear the session cookie.
-    res.clearCookie('csrf-token'); // Clear the CSRF token cookie.
+    res.clearCookie('connect.sid');
+    res.clearCookie('csrf-token');
     res.redirect('/auth.html');
   });
 });

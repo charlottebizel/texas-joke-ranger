@@ -1,19 +1,10 @@
-/**
- * @file Sets up the initial database structure for the application.
- * @description This script connects to an SQLite database file and creates the
- * necessary tables ('users' and 'favorites') if they do not already exist.
- * This script is intended to be run once manually from the command line (e.g., `node database.js`)
- * to initialize the database before starting the main server.
- */
-
 const sqlite3 = require('sqlite3').verbose();
 const { open } = require('sqlite');
 
-/**
- * Asynchronously connects to the database, creates tables, and then closes the connection.
- * @async
- * @function setupDatabase
- */
+// This script sets up the database.
+// Run it once with `node database.js` before starting the server.
+
+// Connects to the database, creates tables, and then closes the connection.
 async function setupDatabase() {
   try {
     // Open a connection to the SQLite database file.

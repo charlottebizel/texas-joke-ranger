@@ -1,20 +1,6 @@
-/**
- * @file Manages the main user interface and interactions for the site.
- * @description This script defines a SiteUI class that encapsulates all major
- * front-end functionalities, including the navigation menu, tabs, back-to-top button,
- * session management, and dynamically loading jokes on the homepage.
- */
-
-/**
- * @class SiteUI
- * @description A custom JavaScript class to encapsulate UI functionalities
- * such as the hamburger menu, tabs, and the back-to-top button.
- */
+// This class handles all the main UI stuff
 class SiteUI {
-  /**
-   * @constructor
-   * @description Selects all necessary DOM elements and initializes all UI components.
-   */
+  // Selects all necessary DOM elements and initializes all UI components
   constructor() {
     this.hamburger = document.querySelector('.hamburger');
     this.navMenu = document.querySelector('.nav-menu');
@@ -28,10 +14,7 @@ class SiteUI {
     this.init();
   }
 
-  /**
-   * @method init
-   * @description Initializes all UI components by calling their respective init methods.
-   */
+  // Initializes all UI components
   init() {
     this.initHamburger();
     this.initTabs();
@@ -40,11 +23,7 @@ class SiteUI {
     this.initJokes();
   }
 
-  /**
-   * @method initJokes
-   * @description Sets up the joke-fetching functionality on the homepage.
-   * Attaches an event listener to the "refresh" button and performs an initial fetch.
-   */
+  // Sets up the joke-fetching on the homepage
   initJokes() {
     if (!this.jokesContainer) return;
 
@@ -52,11 +31,7 @@ class SiteUI {
     this.fetchAndShowJokes();
   }
 
-  /**
-   * @method fetchAndShowJokes
-   * @description Fetches a set number of random jokes from the Chuck Norris API
-   * and displays them on the homepage. Handles loading and error states.
-   */
+  // Fetches and displays random jokes
   async fetchAndShowJokes() {
     this.jokesList.innerHTML = '<p>Loading jokes...</p>';
     try {
@@ -80,11 +55,7 @@ class SiteUI {
     }
   }
 
-  /**
-   * @method initHamburger
-   * @description Initializes the hamburger menu for mobile navigation.
-   * Toggles the menu's visibility on click and closes it when a link is clicked.
-   */
+  // Initializes the hamburger menu for mobile
   initHamburger() {
     if (!this.hamburger || !this.navMenu) return;
 
@@ -102,11 +73,7 @@ class SiteUI {
     });
   }
 
-  /**
-   * @method initTabs
-   * @description Initializes the tab system.
-   * Adds click event listeners to tab headers to switch between tab panes.
-   */
+  // Initializes the tab system
   initTabs() {
     if (!this.tabItems.length) return;
 
@@ -118,11 +85,7 @@ class SiteUI {
     });
   }
 
-  /**
-   * @method switchTab
-   * @param {string} tabId - The ID of the tab to activate.
-   * @description Hides all tab panes and shows only the one corresponding to the clicked tab.
-   */
+  // Hides all tab panes and shows only the active one
   switchTab(tabId) {
     this.tabItems.forEach(item => item.classList.remove('active'));
     this.tabPanes.forEach(pane => pane.classList.remove('active'));
@@ -134,11 +97,7 @@ class SiteUI {
     if (activePane) activePane.classList.add('active');
   }
 
-  /**
-   * @method initBackToTop
-   * @description Initializes the "back to top" button.
-   * The button appears on scroll and smoothly scrolls the page to the top when clicked.
-   */
+  // Initializes the "back to top" button
   initBackToTop() {
     if (!this.backToTopBtn) return;
 
@@ -152,11 +111,7 @@ class SiteUI {
     });
   }
 
-  /**
-   * @method checkSession
-   * @description Checks if a user is currently logged in by making a request to the server's /profile endpoint.
-   * If logged in, it updates the UI to show a welcome message and a logout button.
-   */
+  // Checks if a user is logged in and updates the UI
   async checkSession() {
     const userSession = document.getElementById('user-session');
     if (!userSession) return;
@@ -174,12 +129,7 @@ class SiteUI {
     }
   }
 
-  /**
-   * @method showLogout
-   * @param {HTMLElement} container - The container element to display the user session info.
-   * @param {string} username - The username of the logged-in user.
-   * @description Renders a welcome message and a logout button in the provided container.
-   */
+  // Renders a welcome message and a logout button
   showLogout(container, username) {
     container.innerHTML = '';
 
