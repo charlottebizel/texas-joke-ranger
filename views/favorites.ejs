@@ -1,0 +1,73 @@
+<!--
+ * @file EJS template for the favorites page.
+ * @description Displays all jokes saved as favorites by the logged-in user.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites — Texas Joke Ranger</title>
+    <link rel="stylesheet" href="<%= BASE_URL %>/css/style.css">
+    <link href="https://fonts.cdnfonts.com/css/western" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="nav-logo">TEXAS JOKE RANGER</a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/jokes" class="nav-link">Jokes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/favorites" class="nav-link">⭐ Favorites</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/auth.html" class="nav-link">Login</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="favorites-container">
+            <h1>⭐ My Favorite Jokes</h1>
+            <p class="favorites-subtitle">Welcome, <strong><%= user %></strong> — here are your saved jokes.</p>
+
+            <% if (favorites.length === 0) { %>
+                <div class="favorites-empty">
+                    <p>You have no favorites yet.</p>
+                    <a href="/jokes" class="btn">Go get some jokes!</a>
+                </div>
+            <% } else { %>
+                <ul class="favorites-list">
+                    <% favorites.forEach(fav => { %>
+                        <li class="favorite-card" data-joke-id="<%= fav.joke_id %>">
+                            <p class="favorite-text"><%= fav.joke_text %></p>
+                            <button class="btn btn-remove" data-joke-id="<%= fav.joke_id %>">
+                                🗑 Remove
+                            </button>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } %>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Texas Joke Ranger</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<%= BASE_URL %>/js/favorites.js"></script>
+</body>
+</html>

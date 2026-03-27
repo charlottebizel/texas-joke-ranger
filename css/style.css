@@ -511,3 +511,105 @@ body.dark-theme #joke-list-container {
 #tab3 p {
     font-size: 1.5rem;
 }
+
+/* ===========================
+   FAVORITES PAGE
+   =========================== */
+
+.favorites-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.favorites-container h1 {
+    font-size: 2.5rem;
+    color: var(--text-color-light);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.favorites-subtitle {
+    text-align: center;
+    color: var(--text-color-light);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.favorites-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.favorite-card {
+    background-color: var(--card-bg-light);
+    border-radius: 10px;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+body.dark-theme .favorite-card {
+    background-color: var(--card-bg-dark);
+}
+
+.favorite-text {
+    color: grey;
+    font-size: 1.1rem;
+    margin: 0;
+    flex: 1;
+}
+
+.btn-remove {
+    background-color: var(--secondary-color);
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+
+.btn-remove:hover {
+    opacity: 0.8;
+}
+
+.favorites-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-color-light);
+    font-size: 1.2rem;
+}
+
+/* Favorites button on joke slides */
+.fav-btn {
+    margin-top: 16px;
+    font-size: 1rem;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.fav-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.fav-btn--active {
+    background-color: #b8860b;
+}
+
+.fav-btn--active:hover {
+    background-color: #996b00;
+}

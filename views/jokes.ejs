@@ -1,8 +1,6 @@
 <!--
  * @file EJS template for the jokes page.
- * @description This template renders a page that displays Chuck Norris jokes in a carousel.
- * It receives a 'jokes' array from the server to populate the carousel slides.
- * It also includes the structure for a modal to view and copy individual jokes.
+ * @description Displays Chuck Norris jokes in a carousel with Add to Favorites buttons.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -10,16 +8,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chuck Norris Jokes</title>
-    <!-- Link to the main stylesheet, using BASE_URL provided by the server -->
     <link rel="stylesheet" href="<%= BASE_URL %>/css/style.css">
-    <!-- Link to the Splide carousel stylesheet -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
-    <!-- Link to the custom Western font -->
     <link href="https://fonts.cdnfonts.com/css/western" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
     <header>
-        <!-- Standard navigation bar -->
         <nav class="navbar">
             <a href="/" class="nav-logo">TEXAS JOKE RANGER</a>
             <ul class="nav-menu">
@@ -28,6 +23,9 @@
                 </li>
                 <li class="nav-item">
                     <a href="/jokes" class="nav-link">Jokes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/favorites" class="nav-link">⭐ Favorites</a>
                 </li>
                 <li class="nav-item">
                     <a href="/auth.html" class="nav-link">Login</a>
@@ -42,21 +40,24 @@
     </header>
 
     <main>
-        <!-- Splide.js carousel container -->
         <div class="splide">
             <div class="splide__track">
                 <ul class="splide__list">
-                    <%# 
-                      - Loops through the 'jokes' array passed from the server.
-                      - For each joke, it creates a carousel slide.
-                    %>
                     <% jokes.forEach(joke => { %>
-                        <%#
-                          - The slide element stores the full joke text in a 'data-joke-text' attribute.
-                          - This attribute is used by js/jokes.js to populate the modal.
+                        <%
+                          // Check if this joke is already in the user's favorites
+                          const isFav = favorites.some(f => f.joke_id === joke.id);
                         %>
-                        <li class="splide__slide" data-joke-text="<%= joke.value %>">
+                        <li class="splide__slide"
+                            data-joke-id="<%= joke.id %>"
+                            data-joke-text="<%= joke.value %>">
                             <p><%= joke.value %></p>
+                            <button class="btn fav-btn <%= isFav ? 'fav-btn--active' : '' %>"
+                                    data-joke-id="<%= joke.id %>"
+                                    data-joke-text="<%= joke.value %>"
+                                    data-is-fav="<%= isFav %>">
+                                <%= isFav ? '★ Saved' : '☆ Add to Favorites' %>
+                            </button>
                         </li>
                     <% }) %>
                 </ul>
@@ -64,10 +65,7 @@
         </div>
     </main>
 
-    <!-- 
-      - Modal for displaying a single joke.
-      - This is hidden by default with CSS and shown by js/jokes.js.
-    -->
+    <!-- Modal for displaying a single joke -->
     <div id="joke-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
@@ -76,9 +74,8 @@
         </div>
     </div>
 
-    <!-- Script for the Splide carousel -->
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-    <!-- Custom script for modal and other interactions, using BASE_URL -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="<%= BASE_URL %>/js/jokes.js"></script>
 </body>
 </html>
