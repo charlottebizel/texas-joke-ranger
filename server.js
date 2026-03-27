@@ -23,11 +23,17 @@ const port = 3001;
 const isProduction = process.env.NODE_ENV === 'production';
 
 // === CONSTANTS ===
-// Base URL for the site, used in templates to ensure correct paths.
+/**
+ * @constant {string} BASE_URL
+ * @description Base URL for the site, used in templates to ensure correct paths.
+ */
 const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
 
 // === RATE LIMITING (Security) ===
-// A global rate limiter to prevent abuse. Limits to 100 requests per 15 minutes.
+/**
+ * @constant {import('express-rate-limit').RateLimitRequestHandler} globalLimiter
+ * @description A global rate limiter to prevent abuse. Limits to 100 requests per 15 minutes.
+ */
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -36,7 +42,10 @@ const globalLimiter = rateLimit({
   message: { message: 'Too many requests, please try again later.' }
 });
 
-// A stricter rate limiter for authentication routes to prevent brute-force attacks.
+/**
+ * @constant {import('express-rate-limit').RateLimitRequestHandler} authLimiter
+ * @description A stricter rate limiter for authentication routes to prevent brute-force attacks.
+ */
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
@@ -45,7 +54,11 @@ const authLimiter = rateLimit({
   message: { message: 'Too many login attempts, please try again in 15 minutes.' }
 });
 
-let db; // Variable to hold the database connection.
+/**
+ * @type {import('sqlite').Database}
+ * @description Variable to hold the active SQLite database connection.
+ */
+let db;
 
 // === MIDDLEWARES ===
 app.set('view engine', 'ejs'); // Set EJS as the templating engine.
@@ -119,6 +132,11 @@ const csrfProtection = (req, res, next) => {
 app.use(csrfProtection); // Apply CSRF protection to all relevant routes.
 
 // === DATABASE CONNECTION & SERVER START ===
+/**
+ * @async
+ * @function initializeApp
+ * @description Opens a connection to the SQLite database and starts the Express server.
+ */
 (async () => {
   try {
     // Open a connection to the SQLite database.
@@ -143,6 +161,8 @@ app.use(csrfProtection); // Apply CSRF protection to all relevant routes.
  * @route GET /csrf-token
  * @description Generates and provides a CSRF token to the client.
  * The client stores this and sends it back in headers for subsequent state-changing requests.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
  */
 app.get('/csrf-token', (req, res) => {
     const csrfToken = crypto.randomBytes(100).toString('hex');
@@ -155,6 +175,8 @@ app.get('/csrf-token', (req, res) => {
 /**
  * @route GET /jokes
  * @description (Protected) Fetches 10 random jokes from an external API and renders the jokes page.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
  */
 app.get('/jokes', isAuthenticated, async (req, res) => {
   try {
@@ -170,12 +192,38 @@ app.get('/jokes', isAuthenticated, async (req, res) => {
   }
 });
 
+/**
+ * @route GET /jokes.html
+ * @description Redirects requests from /jokes.html to the /jokes route to handle hardcoded links.
+ */
+app.get('/jokes.html', (req, res) => {
+  res.redirect('/jokes');
+});
+
+/**
+ * @route GET /favorites
+ * @description (Protected) Renders the favorites page with the user's saved jokes.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ */
+app.get('/favorites', isAuthenticated, async (req, res) => {
+  try {
+    const favorites = await db.all('SELECT * FROM favorites WHERE user_id = ?', [req.session.userId]);
+    res.render('favorites', { favorites, user: req.session.username });
+  } catch (err) {
+    console.error('Error loading favorites page:', err);
+    res.status(500).send('Error loading favorites page.');
+  }
+});
+
 // --- AUTHENTICATION ROUTES ---
 
 /**
  * @route POST /register
  * @description (Rate-limited) Handles new user registration.
  * Hashes the password before storing it in the database.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
  */
 app.post('/register', authLimiter, async (req, res) => {
   const { username, password } = req.body;
@@ -199,6 +247,8 @@ app.post('/register', authLimiter, async (req, res) => {
  * @route POST /login
  * @description (Rate-limited) Handles user login.
  * On success, it regenerates the session to prevent session fixation attacks.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
  */
 app.post('/login', authLimiter, async (req, res) => {
   const { username, password } = req.body;
@@ -240,6 +290,8 @@ app.post('/login', authLimiter, async (req, res) => {
 /**
  * @route GET /logout
  * @description Logs the user out by destroying the session and clearing cookies.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
  */
 app.get('/logout', (req, res) => {
   req.session.destroy((err) => {
@@ -254,11 +306,7 @@ app.get('/logout', (req, res) => {
 
 // --- PROTECTED ROUTES ---
 
-/**
- * @route GET /profile
- * @description (Protected) Returns profile information for the logged-in user.
- * Used to check if a user is logged in from the client-side.
- */
+// Get logged-in user profile info
 app.get('/profile', isAuthenticated, (req, res) => {
   res.status(200).json({
     isLoggedIn: true,
@@ -268,10 +316,7 @@ app.get('/profile', isAuthenticated, (req, res) => {
 
 // --- FAVORITES API ROUTES (PROTECTED) ---
 
-/**
- * @route GET /api/favorites
- * @description (Protected) Fetches all favorited jokes for the current user.
- */
+// Get all favorites for the logged-in user
 app.get('/api/favorites', isAuthenticated, async (req, res) => {
   try {
     const favorites = await db.all('SELECT * FROM favorites WHERE user_id = ?', [req.session.userId]);
@@ -281,10 +326,7 @@ app.get('/api/favorites', isAuthenticated, async (req, res) => {
   }
 });
 
-/**
- * @route POST /api/favorites
- * @description (Protected) Adds a new joke to the user's favorites.
- */
+// Add a joke to user favorites
 app.post('/api/favorites', isAuthenticated, async (req, res) => {
   const { joke_id, joke_text } = req.body;
   if (!joke_id || !joke_text) {
@@ -308,10 +350,7 @@ app.post('/api/favorites', isAuthenticated, async (req, res) => {
   }
 });
 
-/**
- * @route DELETE /api/favorites/:joke_id
- * @description (Protected) Deletes a joke from the user's favorites.
- */
+// Remove a joke from user favorites
 app.delete('/api/favorites/:joke_id', isAuthenticated, async (req, res) => {
   const { joke_id } = req.params;
   try {
