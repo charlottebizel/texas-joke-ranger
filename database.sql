@@ -1,9 +1,10 @@
 -- Début de la transaction pour assurer l'intégrité des opérations.
+-- Start of transaction to ensure operational integrity.
 BEGIN TRANSACTION;
 
 --
--- Structure de la table "users"
--- Stocke les informations d'identification des utilisateurs.
+-- Structure of the "users" table
+-- Stores user authentication information.
 --
 CREATE TABLE IF NOT EXISTS "users" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -12,8 +13,8 @@ CREATE TABLE IF NOT EXISTS "users" (
 );
 
 --
--- Structure de la table "favorites"
--- Stocke les blagues marquées comme favorites par les utilisateurs.
+-- Structure of the "favorites" table
+-- Stores the jokes marked as favorites by users.
 --
 CREATE TABLE IF NOT EXISTS "favorites" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,5 +24,5 @@ CREATE TABLE IF NOT EXISTS "favorites" (
     FOREIGN KEY("user_id") REFERENCES "users"("id")
 );
 
--- Valide la transaction.
+-- Commit the transaction.
 COMMIT;
