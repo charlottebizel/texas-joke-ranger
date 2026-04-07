@@ -173,8 +173,15 @@ switch ("$method $uri") {
         // Récupération des 10 blagues pour la vue (imite le comportement de server.js)
         $jokes = [];
         if ($uri === '/jokes') {
+            // Configuration pour ignorer les erreurs de certificat SSL en local
+            $context = stream_context_create([
+                "ssl" => [
+                    "verify_peer" => false,
+                    "verify_peer_name" => false,
+                ]
+            ]);
             for ($i = 0; $i < 10; $i++) {
-                $response = @file_get_contents('https://api.chucknorris.io/jokes/random');
+                $response = @file_get_contents('https://api.chucknorris.io/jokes/random', false, $context);
                 if ($response) {
                     $jokes[] = json_decode($response, true);
                 }
