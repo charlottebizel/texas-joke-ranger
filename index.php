@@ -6,19 +6,11 @@ use App\Config\Database;
 // === 1. CONFIGURATION ET SESSIONS ===
 $isProduction = false; // Passer à true en production
 
-session_set_cookie_params([
-    'lifetime' => 3600,
-    'path' => '/',
-    'domain' => '',
-    'secure' => $isProduction, 
-    'httponly' => true,
-    'samesite' => 'Strict'
-]);
+session_set_cookie_params(['lifetime' => 3600, 'path' => '/', 'secure' => $isProduction, 'httponly' => true, 'samesite' => 'Strict']);
 session_start();
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-    setcookie('csrf-token', $_SESSION['csrf_token'], time() + 3600, '/', '', $isProduction, true);
 }
 
 // === 2. ROUTAGE ET MIDDLEWARES ===
@@ -28,11 +20,10 @@ $method = $_SERVER['REQUEST_METHOD'];
 // Middleware : Protection CSRF globale
 if (in_array($method, ['POST', 'PUT', 'DELETE'])) {
     $csrfHeader = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-    $csrfCookie = $_COOKIE['csrf-token'] ?? '';
 
-    if (!$csrfHeader || !$csrfCookie || $csrfHeader !== $csrfCookie || $csrfHeader !== $_SESSION['csrf_token']) {
+    if (!$csrfHeader || $csrfHeader !== $_SESSION['csrf_token']) {
         http_response_code(403);
-        echo json_encode(['message' => 'Action non autorisée (Token CSRF invalide).']);
+        echo json_encode(['message' => 'Token CSRF invalide.']);
         exit;
     }
 }
@@ -63,10 +54,7 @@ switch ("$method $uri") {
 
     // --- ROUTES SÉCURITÉ ---
     case 'GET /csrf-token':
-        $token = bin2hex(random_bytes(32));
-        $_SESSION['csrf_token'] = $token;
-        setcookie('csrf-token', $token, time() + 3600, '/', '', $isProduction, true);
-        jsonResponse(['csrfToken' => $token]);
+        jsonResponse(['csrfToken' => $_SESSION['csrf_token']]);
 
     // --- ROUTES AUTHENTIFICATION ---
     case 'POST /register':
@@ -104,9 +92,7 @@ switch ("$method $uri") {
         $_SESSION['userId'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         
-        $token = bin2hex(random_bytes(32));
-        $_SESSION['csrf_token'] = $token;
-        setcookie('csrf-token', $token, time() + 3600, '/', '', $isProduction, true);
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         
         jsonResponse([
             'message' => 'Connexion réussie.',
@@ -117,7 +103,6 @@ switch ("$method $uri") {
     case 'GET /logout':
         session_destroy();
         setcookie(session_name(), '', time() - 3600, '/');
-        setcookie('csrf-token', '', time() - 3600, '/');
         header('Location: /auth.html');
         exit;
 
@@ -174,12 +159,7 @@ switch ("$method $uri") {
         $jokes = [];
         if ($uri === '/jokes') {
             // Configuration pour ignorer les erreurs de certificat SSL en local
-            $context = stream_context_create([
-                "ssl" => [
-                    "verify_peer" => false,
-                    "verify_peer_name" => false,
-                ]
-            ]);
+            $context = stream_context_create(["ssl" => ["verify_peer" => false, "verify_peer_name" => false]]);
             for ($i = 0; $i < 10; $i++) {
                 $response = @file_get_contents('https://api.chucknorris.io/jokes/random', false, $context);
                 if ($response) {
