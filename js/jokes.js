@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('joke-modal');
     const modalText = document.getElementById('modal-joke-text');
 
-    // Modale & Copie
+    // Modal & Copy
     document.querySelectorAll('.splide__slide').forEach(slide => {
         slide.addEventListener('click', (e) => {
             if (e.target.classList.contains('fav-btn')) return;
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Toastify({text: "Copied!", style: {background: "green"}}).showToast();
     });
 
-    // Favoris
+    // Favorites
     document.querySelectorAll('.fav-btn').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             e.stopPropagation();

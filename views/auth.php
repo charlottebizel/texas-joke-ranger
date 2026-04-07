@@ -1,5 +1,5 @@
 <?php
-// Si l'utilisateur est déjà connecté, on l'empêche de voir la page de connexion
+
 if (isset($_SESSION['userId'])) {
     header('Location: /jokes');
     exit;

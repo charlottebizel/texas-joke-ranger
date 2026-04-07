@@ -22,7 +22,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script>
-        // Redirection vers la page d'accueil après 4 secondes
+        // Redirect to the home page after 4 seconds
         setTimeout(() => { window.location.href = '/'; }, 4000);
     </script>
 </body>

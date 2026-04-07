@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Menu Hamburger
+    // Hamburger Menu
     document.querySelector('.hamburger')?.addEventListener('click', function() {
         this.classList.toggle('active');
         document.querySelector('.nav-menu').classList.toggle('active');
     });
 
-    // Onglets (Tabs)
+    // Tabs
     document.querySelectorAll('.tab-item').forEach(item => {
         item.addEventListener('click', () => {
             document.querySelectorAll('.tab-item, .tab-pane').forEach(el => el.classList.remove('active'));
@@ -14,14 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Bouton Retour en haut
+    // Back to top button
     const btn = document.getElementById('back-to-top');
     if (btn) {
         window.addEventListener('scroll', () => btn.style.display = window.scrollY > 200 ? 'block' : 'none');
         btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 
-    // Blagues de la page d'accueil
+    // Homepage jokes
     const refreshBtn = document.getElementById('refresh-jokes');
     if (refreshBtn) {
         const fetchJokes = async () => {

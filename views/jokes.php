@@ -37,7 +37,7 @@
                     <?php if (!empty($jokes)): ?>
                         <?php foreach ($jokes as $joke): ?>
                             <?php
-                              // Vérifie si cette blague est déjà dans les favoris
+                              // Check if this joke is already in favorites
                               $isFav = false;
                               if (!empty($favorites)) {
                                   foreach ($favorites as $f) {
@@ -61,7 +61,7 @@
                             </li>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <li class="splide__slide"><p>Oups ! Aucune blague récupérée. Avez-vous bien activé OpenSSL et redémarré le serveur ?</p></li>
+                        <li class="splide__slide"><p>Oops! No jokes retrieved. Did you enable OpenSSL and restart the server?</p></li>
                     <?php endif; ?>
                 </ul>
             </div>

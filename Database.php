@@ -5,24 +5,24 @@ use PDO;
 use PDOException;
 
 /**
- * Classe gérant la connexion à la base de données SQLite
+ * Class managing the connection to the SQLite database
  */
 class Database {
     private $pdo;
 
     public function __construct() {
-        // Chemin corrigé : le fichier SQLite est dans le même dossier
+        // Corrected path: the SQLite file is in the same folder
         $dbPath = __DIR__ . '/db.sqlite';
         
         try {
             $this->pdo = new PDO("sqlite:" . $dbPath);
-            // Activer le mode d'erreur strict pour faciliter le débogage (identique à throw en JS)
+            // Enable strict error mode for easier debugging (similar to throw in JS)
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            // Retourner les données sous forme de tableaux associatifs par défaut
+            // Return data as associative arrays by default
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            // Affiche l'erreur exacte pour comprendre ce qui cloche (utile en mode développement)
-            die("Erreur de connexion à la base de données : " . $e->getMessage());
+            // Display the exact error to understand what went wrong (useful in development mode)
+            die("Database connection error: " . $e->getMessage());
         }
     }
 
