@@ -89,6 +89,7 @@
     <!-- External libraries and custom scripts for carousel and interactive features -->
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/app.js"></script>
     <script src="/js/jokes.js"></script>
 </body>
 </html>

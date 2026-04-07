@@ -9,6 +9,16 @@ $isProduction = false; // Set to true in production
 session_set_cookie_params(['lifetime' => 0, 'path' => '/', 'secure' => $isProduction, 'httponly' => true, 'samesite' => 'Strict']);
 session_start();
 
+// Dev feature: Auto-logout when the local PHP server is restarted
+if (!$isProduction && php_sapi_name() === 'cli-server') {
+    if (isset($_SESSION['server_pid']) && $_SESSION['server_pid'] !== getmypid()) {
+        session_unset();
+        session_destroy();
+        session_start(); // Restart a fresh session
+    }
+    $_SESSION['server_pid'] = getmypid();
+}
+
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
