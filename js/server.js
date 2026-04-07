@@ -57,8 +57,8 @@ app.use(session({
   secret: 'a_very_secret_key',
   resave: false,
   saveUninitialized: true,
-  cookie: { 
-    secure: isProduction, 
+  cookie: {
+    secure: isProduction,
     httpOnly: true, 
     sameSite: 'strict' 
   }
@@ -121,10 +121,10 @@ app.post('/register', authLimiter, async (req, res) => {
 
     const hashed = await bcrypt.hash(password, 10);
     const result = await db.run(
-      'INSERT INTO users (username, password) VALUES (?, ?)', 
+      'INSERT INTO users (username, password) VALUES (?, ?)',
       [username, hashed]
     );
-    
+
     res.status(201).json({ message: 'User created.', userId: result.lastID });
   } catch (err) {
     console.error('Registration error:', err);
@@ -134,7 +134,7 @@ app.post('/register', authLimiter, async (req, res) => {
 
 app.post('/login', authLimiter, async (req, res) => {
   const { username, password } = req.body;
-  
+
   if (!username || !password) {
     return res.status(400).json({ message: 'Username & password required.' });
   }
