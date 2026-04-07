@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>R.I.P. Chuck Norris</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <link href="https://fonts.cdnfonts.com/css/western" rel="stylesheet">
 </head>
 <body class="intro-body">
     <div class="intro-container">
-        <img src="assets/chuck-norris.png" alt="Chuck Norris" class="intro-image">
+        <img src="/assets/chuck-norris.png" alt="Chuck Norris" class="intro-image">
         <h1 class="ml1">
             <span class="text-wrapper">
               <span class="line line1"></span>
@@ -21,11 +21,9 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="js/intro.js"></script>
     <script>
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 4000);
+        // Redirection vers la page d'accueil après 4 secondes
+        setTimeout(() => { window.location.href = '/'; }, 4000);
     </script>
 </body>
 </html>

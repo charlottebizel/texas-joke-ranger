@@ -103,7 +103,7 @@ switch ("$method $uri") {
     case 'GET /logout':
         session_destroy();
         setcookie(session_name(), '', time() - 3600, '/');
-        header('Location: /auth.html');
+        header('Location: /auth');
         exit;
 
     case 'GET /profile':
@@ -146,7 +146,7 @@ switch ("$method $uri") {
     case 'GET /jokes':
     case 'GET /favorites':
         if (!isAuthenticated()) {
-            header('Location: /auth.html');
+            header('Location: /auth');
             exit;
         }
         
@@ -174,11 +174,18 @@ switch ("$method $uri") {
         break;
 
     case 'GET /':
-        // Redirection de la racine vers la page d'accueil (comme Node.js)
-        $fileToServe = is_file(__DIR__ . '/index.html') ? '/index.html' : '/auth.html';
-        header('Content-Type: text/html');
-        readfile(__DIR__ . $fileToServe);
-        exit;
+        require __DIR__ . '/views/home.php';
+        break;
+
+    case 'GET /auth':
+    case 'GET /auth.html': // Garde l'ancienne route valide au cas où
+        require __DIR__ . '/views/auth.php';
+        break;
+
+    case 'GET /intro':
+    case 'GET /intro.html':
+        require __DIR__ . '/views/intro.php';
+        break;
 
     default:
         // --- SERVEUR DE FICHIERS STATIQUES ---

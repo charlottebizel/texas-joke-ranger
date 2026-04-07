@@ -1,24 +1,23 @@
-<!--
- * @file Authentication page for user login and registration.
- * @description This page provides two forms: one for existing users to log in,
- * and one for new users to register. It includes fields for username and password,
- * and areas to display feedback messages. The interactivity is handled by js/auth.js.
--->
-<!-- Authentication page for user login and registration -->
+<?php
+// Si l'utilisateur est déjà connecté, on l'empêche de voir la page de connexion
+if (isset($_SESSION['userId'])) {
+    header('Location: /jokes');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en" class="intro-body">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Authentication</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="intro-body">
 
   <div class="intro-container">
     <p>If you want to see jokes, you have to log in.</p>
     
-    <!-- Container for both login and registration forms -->
     <div id="auth-container">
       
       <!-- Login form -->
@@ -35,7 +34,6 @@
           </div>
           <button type="submit">Login</button>
         </form>
-        <!-- This paragraph is used to display messages from the server after a login attempt -->
         <p id="login-message" class="message"></p>
       </div>
 
@@ -53,16 +51,13 @@
           </div>
           <button type="submit">Register</button>
         </form>
-        <!-- This paragraph is used to display messages from the server after a registration attempt -->
         <p id="register-message" class="message"></p>
       </div>
     </div>
     
-    <!-- Link to return to the homepage -->
-    <a href="index.html" class="btn">Back to Home</a>
+    <a href="/" class="btn">Back to Home</a>
   </div>
 
-  <!-- Script that handles form submission and communication with the server -->
-  <script src="js/auth.js"></script>
+  <script src="/js/auth.js"></script>
 </body>
 </html>
