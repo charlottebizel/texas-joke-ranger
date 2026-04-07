@@ -1,5 +1,6 @@
 RewriteEngine On
-# Si la ressource demandée n'est ni un fichier physique ni un dossier
+# If the requested resource is neither an existing physical file nor a directory
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+# Redirect all requests to index.php (Front Controller pattern)
 RewriteRule ^(.*)$ index.php [QSA,L]

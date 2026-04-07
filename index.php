@@ -6,7 +6,7 @@ use App\Config\Database;
 // === 1. CONFIGURATION AND SESSIONS ===
 $isProduction = false; // Set to true in production
 
-session_set_cookie_params(['lifetime' => 3600, 'path' => '/', 'secure' => $isProduction, 'httponly' => true, 'samesite' => 'Strict']);
+session_set_cookie_params(['lifetime' => 0, 'path' => '/', 'secure' => $isProduction, 'httponly' => true, 'samesite' => 'Strict']);
 session_start();
 
 if (empty($_SESSION['csrf_token'])) {
@@ -158,12 +158,18 @@ switch ("$method $uri") {
         // Fetching 10 jokes for the view (mimics server.js behavior)
         $jokes = [];
         if ($uri === '/jokes') {
-            // Configuration to ignore SSL certificate errors locally
-            $context = stream_context_create(["ssl" => ["verify_peer" => false, "verify_peer_name" => false]]);
+            // Configuration to ignore SSL certificate errors locally and add an HTTP timeout
+            $context = stream_context_create([
+                "ssl" => ["verify_peer" => false, "verify_peer_name" => false],
+                "http" => ["timeout" => 2] // 2 seconds max per request to prevent hanging
+            ]);
             for ($i = 0; $i < 10; $i++) {
                 $response = @file_get_contents('https://api.chucknorris.io/jokes/random', false, $context);
                 if ($response) {
                     $jokes[] = json_decode($response, true);
+                } else {
+                    // Stop fetching if the API hangs or rate-limits to avoid crashing the server
+                    break;
                 }
             }
         }

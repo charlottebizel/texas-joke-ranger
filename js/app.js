@@ -1,11 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Hamburger Menu
+    // Enforce strict tab-level session (logs out if the tab was closed and restored)
+    if (document.getElementById('logout-btn') && !sessionStorage.getItem('tab_session')) {
+        window.location.href = '/logout';
+        return;
+    }
+
+    // Mobile Hamburger Menu toggling
     document.querySelector('.hamburger')?.addEventListener('click', function() {
         this.classList.toggle('active');
         document.querySelector('.nav-menu').classList.toggle('active');
     });
 
-    // Tabs
+    // Tabs navigation logic
     document.querySelectorAll('.tab-item').forEach(item => {
         item.addEventListener('click', () => {
             document.querySelectorAll('.tab-item, .tab-pane').forEach(el => el.classList.remove('active'));
@@ -14,14 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Back to top button
+    // Back to top button visibility and scroll action
     const btn = document.getElementById('back-to-top');
     if (btn) {
         window.addEventListener('scroll', () => btn.style.display = window.scrollY > 200 ? 'block' : 'none');
         btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 
-    // Homepage jokes
+    // Homepage jokes generator functionality
     const refreshBtn = document.getElementById('refresh-jokes');
     if (refreshBtn) {
         const fetchJokes = async () => {

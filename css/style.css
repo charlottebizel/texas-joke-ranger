@@ -377,6 +377,7 @@ body.dark-theme #joke-list-container {
     /* Styles for the mobile hamburger menu */
     .nav-menu {
         position: fixed;
+        z-index: 99;
         left: -100%;
         top: 5rem;
         flex-direction: column;
@@ -402,6 +403,7 @@ body.dark-theme #joke-list-container {
 
     .hamburger {
         display: block;
+        flex-shrink: 0;
     }
 
     .hamburger.active .bar:nth-child(2) {
@@ -414,6 +416,23 @@ body.dark-theme #joke-list-container {
 
     .hamburger.active .bar:nth-child(3) {
         transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Reduce text sizes on mobile to prevent the hamburger menu from being squished */
+    .nav-logo {
+        font-size: 1.1rem;
+    }
+    
+    #user-session {
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    #user-session .btn {
+        margin-top: 0;
+        padding: 5px 10px;
     }
 }
 
@@ -433,7 +452,7 @@ body.dark-theme #joke-list-container {
 }
 
 #jokes-list {
-    /* Bloque la hauteur pour que l'image de fond ne bouge absolument plus */
+    /* Fixes the height so the background image stops resizing completely */
     height: 300px; 
     overflow-y: auto;
 }

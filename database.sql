@@ -1,4 +1,3 @@
--- Début de la transaction pour assurer l'intégrité des opérations.
 -- Start of transaction to ensure operational integrity.
 BEGIN TRANSACTION;
 

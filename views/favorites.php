@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Metadata and external stylesheets for the favorites page -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Favorites - Texas Joke Ranger</title>
@@ -10,6 +11,7 @@
 </head>
 <body>
     <header>
+        <!-- Navigation bar -->
         <nav class="navbar">
             <a href="/" class="nav-logo">TEXAS JOKE RANGER</a>
             <ul class="nav-menu">
@@ -17,11 +19,13 @@
                 <li class="nav-item"><a href="/jokes" class="nav-link">Jokes</a></li>
                 <li class="nav-item"><a href="/favorites" class="nav-link">⭐ Favorites</a></li>
             </ul>
+            <!-- Mobile hamburger menu icon -->
             <div class="hamburger">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
+            <!-- Display user greeting and logout button -->
             <div id="user-session">
                 <span>Hello, <?= htmlspecialchars($user ?? '') ?></span>
                 <a href="/logout"><button id="logout-btn" class="btn">Logout</button></a>
@@ -30,11 +34,14 @@
     </header>
 
     <main>
+        <!-- Container for the user's saved jokes -->
         <div class="favorites-container">
             <h1>Your Favorites</h1>
             <p class="favorites-subtitle">Here are the jokes you saved for later.</p>
+            <!-- Check if the user has any favorites -->
             <?php if (!empty($favorites)): ?>
                 <ul class="favorites-list">
+                    <!-- Iterate through each favorite and display it as a card -->
                     <?php foreach ($favorites as $fav): ?>
                         <li class="favorite-card">
                             <p class="favorite-text"><?= htmlspecialchars($fav['joke_text']) ?></p>
@@ -46,11 +53,13 @@
                     <?php endforeach; ?>
                 </ul>
             <?php else: ?>
+                <!-- Fallback message if the favorites list is empty -->
                 <p class="favorites-empty">You have no favorites yet.</p>
             <?php endif; ?>
         </div>
     </main>
 
+    <!-- External scripts for notifications and custom logic -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/jokes.js"></script>

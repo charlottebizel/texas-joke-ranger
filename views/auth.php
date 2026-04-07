@@ -1,5 +1,6 @@
 <?php
-
+// Redirect the user to the jokes page if they are already logged in,
+// preventing access to the login/register forms.
 if (isset($_SESSION['userId'])) {
     header('Location: /jokes');
     exit;
@@ -8,6 +9,7 @@ if (isset($_SESSION['userId'])) {
 <!DOCTYPE html>
 <html lang="en" class="intro-body">
 <head>
+  <!-- Metadata and styles for the authentication page -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Authentication</title>
@@ -18,6 +20,7 @@ if (isset($_SESSION['userId'])) {
   <div class="intro-container">
     <p>If you want to see jokes, you have to log in.</p>
     
+    <!-- Main wrapper for both authentication forms -->
     <div id="auth-container">
       
       <!-- Login form -->
@@ -58,6 +61,7 @@ if (isset($_SESSION['userId'])) {
     <a href="/" class="btn">Back to Home</a>
   </div>
 
+  <!-- Authentication script handling form submissions via AJAX -->
   <script src="/js/auth.js"></script>
 </body>
 </html>

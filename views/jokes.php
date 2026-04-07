@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Document metadata and external stylesheets (CSS, Splide carousel, Fonts, Toastify) -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chuck Norris Jokes</title>
@@ -11,6 +12,7 @@
 </head>
 <body>
     <header>
+        <!-- Navigation bar -->
         <nav class="navbar">
             <a href="/" class="nav-logo">TEXAS JOKE RANGER</a>
             <ul class="nav-menu">
@@ -18,11 +20,13 @@
                 <li class="nav-item"><a href="/jokes" class="nav-link">Jokes</a></li>
                 <li class="nav-item"><a href="/favorites" class="nav-link">⭐ Favorites</a></li>
             </ul>
+            <!-- Hamburger menu icon for mobile responsiveness -->
             <div class="hamburger">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
+            <!-- User session display showing username and logout button -->
             <div id="user-session">
                 <span>Hello, <?= htmlspecialchars($user ?? '') ?></span>
                 <a href="/logout"><button id="logout-btn" class="btn">Logout</button></a>
@@ -31,9 +35,11 @@
     </header>
 
     <main>
+        <!-- Splide Carousel container for jokes -->
         <div class="splide">
             <div class="splide__track">
                 <ul class="splide__list">
+                    <!-- PHP Logic: Check if jokes exist and iterate through them -->
                     <?php if (!empty($jokes)): ?>
                         <?php foreach ($jokes as $joke): ?>
                             <?php
@@ -48,10 +54,12 @@
                                   }
                               }
                             ?>
+                            <!-- Slide item representing a single joke -->
                             <li class="splide__slide"
                                 data-joke-id="<?= htmlspecialchars($joke['id']) ?>"
                                 data-joke-text="<?= htmlspecialchars($joke['value']) ?>">
                                 <p><?= htmlspecialchars($joke['value']) ?></p>
+                                <!-- Favorite button, toggles active state based on whether the joke is saved -->
                                 <button class="btn fav-btn <?= $isFav ? 'fav-btn--active' : '' ?>"
                                         data-joke-id="<?= htmlspecialchars($joke['id']) ?>"
                                         data-joke-text="<?= htmlspecialchars($joke['value']) ?>"
@@ -61,6 +69,7 @@
                             </li>
                         <?php endforeach; ?>
                     <?php else: ?>
+                        <!-- Fallback message if no jokes are loaded from the API -->
                         <li class="splide__slide"><p>Oops! No jokes retrieved. Did you enable OpenSSL and restart the server?</p></li>
                     <?php endif; ?>
                 </ul>
@@ -77,6 +86,7 @@
         </div>
     </div>
 
+    <!-- External libraries and custom scripts for carousel and interactive features -->
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="/js/jokes.js"></script>
