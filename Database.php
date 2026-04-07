@@ -11,8 +11,8 @@ class Database {
     private $pdo;
 
     public function __construct() {
-        // Chemin vers votre fichier SQLite existant
-        $dbPath = __DIR__ . '/../db.sqlite';
+        // Chemin corrigé : le fichier SQLite est dans le même dossier
+        $dbPath = __DIR__ . '/db.sqlite';
         
         try {
             $this->pdo = new PDO("sqlite:" . $dbPath);
@@ -21,8 +21,8 @@ class Database {
             // Retourner les données sous forme de tableaux associatifs par défaut
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            // En production, on évite d'afficher l'erreur brute pour des raisons de sécurité
-            die("Erreur de connexion à la base de données.");
+            // Affiche l'erreur exacte pour comprendre ce qui cloche (utile en mode développement)
+            die("Erreur de connexion à la base de données : " . $e->getMessage());
         }
     }
 

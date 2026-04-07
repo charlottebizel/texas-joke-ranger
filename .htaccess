@@ -1,0 +1,5 @@
+RewriteEngine On
+# Si la ressource demandée n'est ni un fichier physique ni un dossier
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
