@@ -37,12 +37,4 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshBtn.addEventListener('click', fetchJokes);
         fetchJokes();
     }
-
-    // Vérification de la session
-    fetch('/profile').then(r => r.json()).then(data => {
-        if (data.isLoggedIn) {
-            const sessionDiv = document.getElementById('user-session');
-            if (sessionDiv) sessionDiv.innerHTML = `<span>Hello, ${data.user.username}</span> <a href="/logout"><button class="btn">Logout</button></a>`;
-        }
-    }).catch(()=>{});
 });

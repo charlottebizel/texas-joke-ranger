@@ -432,6 +432,12 @@ body.dark-theme #joke-list-container {
     display: inline-block;
 }
 
+#jokes-list {
+    /* Bloque la hauteur pour que l'image de fond ne bouge absolument plus */
+    height: 300px; 
+    overflow-y: auto;
+}
+
 #tab1 p {
     font-size: 1.5rem;
 }
